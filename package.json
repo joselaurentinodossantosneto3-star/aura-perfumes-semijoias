@@ -1,0 +1,8 @@
+{
+  "name": "aura-perfumes-semijoias",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Loja online e painel da Aura · Perfumes e Semijoias",
+  "scripts": { "build": "node baixar.mjs" },
+  "engines": { "node": "22.x" }
+}
