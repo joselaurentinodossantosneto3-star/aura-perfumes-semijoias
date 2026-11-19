@@ -15,4 +15,17 @@ if (existsSync('index.html')) {
 }
 if (html.length < 500000 || !html.includes('__auraApp')) throw new Error('index.html inesperado: confira a versão');
 writeFileSync('public/index.html', html);
+
+// arquivos pequenos que acompanham a página (aplicativo instalável)
+const versaoEst = existsSync('versao.txt') ? readFileSync('versao.txt', 'utf8').trim() : 'main';
+for (const f of ['manifest.webmanifest', 'sw.js', 'icone-192.png', 'icone-512.png', 'icone-512-m.png']) {
+  let dados;
+  if (existsSync(f)) dados = readFileSync(f);
+  else {
+    const r = await fetch(`https://raw.githubusercontent.com/${REPO}/${versaoEst}/${f}`);
+    if (!r.ok) throw new Error(`não deu para baixar ${f} (${r.status})`);
+    dados = Buffer.from(await r.arrayBuffer());
+  }
+  writeFileSync('public/' + f, dados);
+}
 console.log('public/index.html pronto:', html.length, 'caracteres');
