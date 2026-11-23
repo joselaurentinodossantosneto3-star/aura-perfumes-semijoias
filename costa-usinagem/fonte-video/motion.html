@@ -555,10 +555,10 @@ function sFim(T) {
   font(46, 900, 'Archivo', 'expanded', 2);
   maskText('(13) 97415-7919', 540, 1560, 46, ev(t, .85, .45, E.expo), { align: 'center' });
   ctx.textAlign = 'left';
-  const f = ev(t, 2.2, .8, E.inout); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${f})`; ctx.fillRect(0, 0, W, H); }
+  const f = ev(t, 3.7, .8, E.inout); if (f > 0) { ctx.fillStyle = `rgba(0,0,0,${f})`; ctx.fillRect(0, 0, W, H); }
 }
 
-const TOTAL = 49;
+const TOTAL = 50.5;
 const CUTS = [4, 9, 10, ...SERV.slice(1).map((_, i) => S0 + (i + 1) * SD), 35, 38, 46];
 function draw(T) {
   ctx.save();

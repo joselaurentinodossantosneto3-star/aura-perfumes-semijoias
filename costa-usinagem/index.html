@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="motion">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -13,6 +13,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  // sem animação para quem pediu menos movimento
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.remove('motion');
+</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -28,181 +32,291 @@
 </script>
 <style>
 :root{
-  --red:#c8101e; --red-2:#a00c17; --ink:#0b0b0c; --ink-2:#151517; --ink-3:#202024;
-  --steel:#8f939a; --line:#2a2a2f; --paper:#ecebe7; --paper-2:#f6f5f2; --text:#1a1a1c;
-  --wa:#1fae55;
+  --red:#c8101e; --red-2:#a00c17; --ink:#0b0b0c; --ink-2:#121214; --ink-3:#1c1d21;
+  --steel:#8f939a; --line:#26272c; --paper:#ecebe7; --paper-2:#f6f5f2; --text:#1a1a1c; --wa:#1fae55;
   --display:'Archivo',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif;
-  --r:14px; --max:1180px;
+  --r:16px; --max:1240px; --ease:cubic-bezier(.16,1,.3,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:76px}
-body{font-family:var(--body);background:var(--paper);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-img,video{display:block;max-width:100%}
+html{scroll-padding-top:80px;-webkit-text-size-adjust:100%}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+html,body{overflow-x:clip}
+body{font-family:var(--body);background:var(--ink);color:#fff;line-height:1.55;-webkit-font-smoothing:antialiased}
+img,video,svg{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
-.display{font-family:var(--display);font-stretch:112%;font-weight:900;letter-spacing:-.01em;line-height:.98;text-transform:uppercase}
-.eyebrow{font:700 .78rem/1 var(--body);letter-spacing:.22em;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:10px}
-.eyebrow::before{content:"";width:28px;height:3px;background:var(--red)}
-.btn{display:inline-flex;align-items:center;gap:10px;font:700 .95rem/1 var(--body);padding:16px 22px;border-radius:999px;transition:transform .15s,background .15s,box-shadow .15s;white-space:nowrap}
-.btn:hover{transform:translateY(-2px)}
-.btn svg{width:20px;height:20px;flex:none}
-.btn-wa{background:var(--wa);color:#fff;box-shadow:0 8px 24px -8px rgba(31,174,85,.6)}
-.btn-wa:hover{background:#1a9a4b}
+.display{font-family:var(--display);font-stretch:118%;font-weight:900;letter-spacing:-.01em;line-height:.95;text-transform:uppercase}
+.eyebrow{font:700 .76rem/1 var(--body);letter-spacing:.24em;text-transform:uppercase;color:var(--red);display:inline-flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:30px;height:3px;background:currentColor}
+.line{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
+.line > span{display:inline-block;will-change:transform}
+.red{color:var(--red)}
+.outline{color:transparent;-webkit-text-stroke:2px currentColor}
+.hero .outline{-webkit-text-stroke-color:#fff}
+
+/* botões */
+.btn{position:relative;display:inline-flex;align-items:center;gap:12px;font:700 1rem/1 var(--body);padding:18px 26px;border-radius:999px;white-space:nowrap;overflow:hidden;isolation:isolate;transition:transform .4s var(--ease)}
+.btn svg{width:22px;height:22px;flex:none}
+.btn::after{content:"";position:absolute;inset:0;z-index:-1;transform:translateY(101%);transition:transform .5s var(--ease);border-radius:inherit}
+.btn:hover::after{transform:none}
+.btn-wa{background:var(--wa);color:#fff;box-shadow:0 14px 34px -12px rgba(31,174,85,.7)}
+.btn-wa::after{background:#16823f}
+.btn-ghost{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.3)}
+.btn-ghost::after{background:#fff}
+.btn-ghost:hover{color:var(--ink)}
 .btn-red{background:var(--red);color:#fff}
-.btn-red:hover{background:var(--red-2)}
-.btn-ghost{border:1.5px solid rgba(255,255,255,.28);color:#fff}
-.btn-ghost:hover{border-color:#fff}
+.btn-red::after{background:var(--ink)}
+
+/* abertura */
+#intro{position:fixed;inset:0;z-index:200;background:var(--ink);display:grid;place-items:center;overflow:hidden}
+#intro .stage{position:relative;width:min(560px,86vw);aspect-ratio:1}
+#intro svg{position:absolute;inset:0;width:100%;height:100%}
+#intro .word{position:absolute;left:0;right:0;text-align:center;font-family:var(--display);font-stretch:125%;font-weight:900;line-height:1;white-space:nowrap}
+#intro .w1{top:24%;font-size:clamp(2.6rem,10vw,4.6rem);letter-spacing:.12em}
+#intro .w2{top:58%;font-size:clamp(1.3rem,5vw,2.2rem);letter-spacing:.06em;padding-left:14%}
+#intro .w1 span,#intro .w2 span{display:inline-block}
+html:not(.motion) #intro{display:none}
 
 /* topo */
-header{position:sticky;top:0;z-index:50;background:rgba(11,11,12,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-header .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
-.brand{display:flex;align-items:center;gap:12px}
-.brand img{height:54px;width:auto}
-nav{display:flex;align-items:center;gap:28px}
-nav a.lnk{color:#d6d6da;font:600 .9rem/1 var(--body);transition:color .15s}
-nav a.lnk:hover{color:#fff}
-nav .btn{padding:11px 16px;font-size:.85rem}
-@media (max-width:860px){nav a.lnk{display:none}}
+.progress{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--red);transform-origin:0 50%;transform:scaleX(0);z-index:120}
+header{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .4s,border-color .4s,transform .5s var(--ease);border-bottom:1px solid transparent}
+header.solid{background:rgba(11,11,12,.86);backdrop-filter:blur(12px);border-color:var(--line)}
+header.hide{transform:translateY(-100%)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:76px;gap:16px}
+.brand img{height:56px;width:auto;mix-blend-mode:lighten}
+nav{display:flex;align-items:center;gap:30px}
+nav a.lnk{position:relative;color:#d6d6da;font:600 .92rem/1 var(--body)}
+nav a.lnk::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:2px;background:var(--red);transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease)}
+nav a.lnk:hover::after{transform:scaleX(1);transform-origin:left}
+nav .btn{padding:12px 18px;font-size:.88rem}
+@media (max-width:900px){nav a.lnk{display:none}}
 
 /* hero */
-.hero{background:var(--ink);color:#fff;position:relative;overflow:hidden}
-.hero::before{content:"";position:absolute;right:-20%;top:-10%;width:58%;height:140%;background:var(--red);transform:skewX(-18deg);opacity:.95}
-.hero::after{content:"";position:absolute;inset:0;background:
-  radial-gradient(circle at 20% 30%,rgba(255,255,255,.05),transparent 50%),
-  repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 80px);pointer-events:none}
-.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding-top:72px;padding-bottom:80px}
-.hero h1{font-size:clamp(2.3rem,5.2vw,4.2rem);margin:20px 0 22px}
-.hero h1 em{font-style:normal;color:var(--red)}
-.hero p.lead{font-size:clamp(1.02rem,1.6vw,1.2rem);color:#c9c9ce;max-width:34em}
-.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;background:var(--ink)}
+.hero .bg-grid{position:absolute;inset:-10%;background:
+  linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px) 0 0/90px 90px,
+  linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px) 0 0/90px 90px;
+  -webkit-mask-image:radial-gradient(ellipse at 40% 45%,#000 30%,transparent 75%);mask-image:radial-gradient(ellipse at 40% 45%,#000 30%,transparent 75%)}
+.hero .slab{position:absolute;top:-10%;right:-14%;width:42%;height:130%;background:var(--red);transform:skewX(-16deg);transform-origin:bottom}
+.hero .gears{position:absolute;left:-180px;bottom:-260px;width:760px;opacity:.16;pointer-events:none}
+.hero .gears2{position:absolute;right:30%;top:-140px;width:380px;opacity:.1;pointer-events:none}
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.3fr .7fr;gap:40px;align-items:center;padding-top:120px;padding-bottom:90px;width:100%}
+.hero h1{font-size:clamp(2.4rem,5.2vw,4.7rem);margin:22px 0 26px}
+.hero .lead{font-size:clamp(1.02rem,1.5vw,1.2rem);color:#c4c4ca;max-width:33em}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
 .hero .eyebrow{color:#fff}
-.phone{justify-self:center;width:min(330px,100%);aspect-ratio:9/16;border-radius:30px;padding:10px;background:#000;box-shadow:0 40px 80px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.12);position:relative}
-.phone video{width:100%;height:100%;object-fit:cover;border-radius:22px;background:#000}
-.phone .snd{position:absolute;right:20px;bottom:20px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(6px)}
+.hero .eyebrow::before{background:var(--red)}
+.phone-wrap{perspective:1200px;justify-self:center}
+.phone{width:min(330px,78vw);aspect-ratio:9/16;border-radius:34px;padding:10px;background:#000;box-shadow:0 50px 90px -30px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.14);position:relative;transform-style:preserve-3d}
+.phone video{width:100%;height:100%;object-fit:cover;border-radius:25px;background:#000}
+.phone .snd{position:absolute;right:22px;bottom:22px;height:46px;padding:0 16px 0 12px;border-radius:999px;border:0;background:rgba(0,0,0,.65);color:#fff;display:flex;align-items:center;gap:8px;cursor:pointer;backdrop-filter:blur(6px);font:600 .8rem var(--body)}
 .phone .snd svg{width:20px;height:20px}
-@media (max-width:860px){
-  .hero .wrap{grid-template-columns:1fr;padding-top:48px;padding-bottom:56px;gap:40px}
-  .hero::before{right:-40%;width:90%;top:55%;height:80%}
-  .phone{width:min(300px,82vw)}
+.phone .tag-float{position:absolute;font:800 .78rem/1 var(--body);letter-spacing:.14em;padding:10px 13px;border-radius:6px;background:#fff;color:var(--ink);box-shadow:0 14px 30px -10px rgba(0,0,0,.5);transform:translateZ(40px)}
+.phone .t1{left:-64px;top:16%}
+.phone .t2{right:-58px;top:52%;background:var(--ink);color:#fff}
+.phone .t3{left:-40px;bottom:10%;background:var(--ink-3);color:#fff}
+.scroll-hint{position:absolute;left:50%;bottom:26px;z-index:3;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font:700 .68rem/1 var(--body);letter-spacing:.26em;color:#9a9aa0}
+.scroll-hint i{width:2px;height:46px;background:linear-gradient(var(--red),transparent);animation:drip 1.8s infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:1fr;padding-top:110px;gap:56px}
+  .hero .slab{top:58%;right:-40%;width:110%;height:70%}
+  .phone .t1{left:-18px}.phone .t2{right:-14px}.phone .t3{left:-10px}
+  .scroll-hint{display:none}
 }
 
-/* faixa de números */
-.strip{background:var(--ink-2);color:#fff;border-top:1px solid var(--line)}
-.strip .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
-.strip div.it{padding:26px 18px;border-left:1px solid var(--line)}
-.strip div.it:first-child{border-left:0}
-.strip b{display:block;font-family:var(--display);font-stretch:115%;font-weight:900;font-size:1.9rem;line-height:1;color:#fff}
-.strip span{font-size:.85rem;color:var(--steel)}
-@media (max-width:760px){.strip .wrap{grid-template-columns:1fr 1fr}.strip div.it:nth-child(3){border-left:0}.strip div.it:nth-child(n+3){border-top:1px solid var(--line)}}
+/* faixa corrida */
+.marquee{background:var(--red);color:#fff;overflow:hidden;white-space:nowrap;border-block:1px solid rgba(0,0,0,.2);transform:rotate(-2deg) scale(1.04);margin:-24px 0;position:relative;z-index:5}
+.marquee.dark{background:var(--ink-3);transform:rotate(1.5deg) scale(1.04)}
+.marquee .track{display:inline-flex;gap:0;padding:20px 0;will-change:transform}
+.marquee span{font-family:var(--display);font-stretch:125%;font-weight:900;font-size:clamp(1.5rem,3.4vw,2.6rem);text-transform:uppercase;padding:0 26px;display:inline-flex;align-items:center;gap:52px}
+.marquee span::after{content:"";width:16px;height:16px;background:#fff;transform:rotate(45deg)}
+.marquee.dark span::after{background:var(--red)}
 
-section{padding:96px 0}
-.sec-head{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:44px;flex-wrap:wrap}
-.sec-head h2{font-size:clamp(2rem,4.4vw,3.4rem);margin-top:14px}
-.sec-head p{max-width:30em;color:#55555b}
-@media (max-width:640px){section{padding:68px 0}}
+/* números */
+.stats{background:var(--ink-2);padding:110px 0 90px}
+.stats .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.stat{padding:10px 26px;border-left:1px solid var(--line)}
+.stat:first-child{border-left:0;padding-left:0}
+.stat b{display:flex;font-family:var(--display);font-stretch:118%;font-weight:900;font-size:clamp(2.4rem,4.6vw,4rem);line-height:1;height:1em;overflow:hidden}
+.stat b .plus{color:var(--red)}
+.stat b > span[data-odo]{display:flex}
+.odo{display:inline-flex;flex-direction:column}
+.odo i{font-style:normal;height:1em;line-height:1}
+.stat > span{display:block;margin-top:12px;color:var(--steel);font-size:.92rem}
+@media (max-width:760px){.stats .grid4{grid-template-columns:1fr 1fr;row-gap:36px}.stat:nth-child(3){border-left:0;padding-left:0}}
+
+section{position:relative;padding:130px 0}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:28px;margin-bottom:56px;flex-wrap:wrap}
+.sec-head h2{font-size:clamp(2.4rem,5.6vw,4.6rem);margin-top:18px}
+.sec-head p{max-width:30em;color:#a6a6ac}
+@media (max-width:640px){section{padding:90px 0}}
 
 /* serviços */
-.svc{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.svc-card{background:#fff;border-radius:var(--r);padding:34px;position:relative;overflow:hidden;border:1px solid #dddcd6}
+#servicos{background:var(--paper);color:var(--text)}
+#servicos .sec-head p{color:#58585e}
+.svc{display:grid;grid-template-columns:1fr 1fr;gap:22px;perspective:1400px}
+.svc-card{background:#fff;border-radius:var(--r);padding:40px;position:relative;overflow:hidden;border:1px solid #dcdbd5;transform-style:preserve-3d;will-change:transform}
 .svc-card.dark{background:var(--ink);color:#fff;border-color:var(--ink)}
-.svc-card h3{font-size:clamp(1.6rem,3vw,2.2rem);margin:10px 0 8px}
+.svc-card h3{font-size:clamp(1.7rem,3vw,2.4rem);margin:14px 0 10px}
 .svc-card > p{color:#5d5d63}
 .svc-card.dark > p{color:#b5b5bb}
-.svc-card ul{list-style:none;margin-top:24px;display:grid;gap:2px}
-.svc-card li{display:flex;gap:14px;align-items:baseline;padding:13px 0;border-top:1px solid #e6e5e0;font-weight:600}
+.svc-card ul{list-style:none;margin-top:26px}
+.svc-card li{display:flex;gap:16px;align-items:baseline;padding:15px 0;border-top:1px solid #e6e5e0;font-weight:600}
 .svc-card.dark li{border-color:var(--line)}
-.svc-card li small{display:block;font-weight:400;color:#7a7a80;font-size:.86rem}
+.svc-card li small{display:block;font-weight:400;color:#7a7a80;font-size:.88rem}
 .svc-card.dark li small{color:#8f9399}
 .svc-card li::before{content:"";flex:none;width:9px;height:9px;background:var(--red);transform:rotate(45deg);margin-top:2px}
-.svc-card .num{position:absolute;right:24px;top:14px;font:900 5.5rem/1 var(--display);font-stretch:120%;color:rgba(0,0,0,.05)}
-.svc-card.dark .num{color:rgba(255,255,255,.06)}
-.tag{display:inline-block;font:700 .72rem/1 var(--body);letter-spacing:.18em;text-transform:uppercase;padding:7px 10px;border-radius:4px;background:var(--red);color:#fff}
+.svc-card .num{position:absolute;right:26px;top:8px;font:900 7rem/1 var(--display);font-stretch:125%;color:transparent;-webkit-text-stroke:2px rgba(0,0,0,.08)}
+.svc-card.dark .num{-webkit-text-stroke-color:rgba(255,255,255,.1)}
+.svc-card .gear-deco{position:absolute;right:-90px;bottom:-90px;width:240px;opacity:.07}
+.svc-card.dark .gear-deco{opacity:.12}
+.tag{display:inline-block;font:700 .72rem/1 var(--body);letter-spacing:.18em;text-transform:uppercase;padding:8px 11px;border-radius:4px;background:var(--red);color:#fff}
 .tag.steel{background:#3a3b40}
-@media (max-width:760px){.svc{grid-template-columns:1fr}.svc-card{padding:26px}}
+@media (max-width:820px){.svc{grid-template-columns:1fr}.svc-card{padding:28px}}
 
-/* trabalhos */
-#trabalhos{background:var(--ink);color:#fff}
-#trabalhos .sec-head p{color:#a9a9af}
-.filters{display:flex;gap:8px;flex-wrap:wrap}
-.filters button{font:600 .88rem/1 var(--body);padding:11px 16px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:#cfcfd3;cursor:pointer;transition:.15s}
-.filters button[aria-pressed="true"]{background:#fff;color:var(--ink);border-color:#fff}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.work{position:relative;border-radius:var(--r);overflow:hidden;background:var(--ink-3);cursor:zoom-in;border:0;padding:0;text-align:left;color:#fff;font:inherit;aspect-ratio:4/3.4}
-.work img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+/* trabalhos: galeria horizontal */
+#trabalhos{background:var(--ink);padding-top:110px;padding-bottom:0;overflow:hidden}
+@media (min-width:901px){#trabalhos{min-height:100vh}#trabalhos .sec-head{margin-bottom:28px}}
+#trabalhos .sec-head{margin-bottom:40px}
+.h-wrap{position:relative}
+.h-track{display:flex;gap:24px;padding:0 20px 90px;width:max-content}
+.work{position:relative;flex:none;width:min(440px,82vw,calc((100vh - 360px) * .8));min-width:300px;aspect-ratio:4/5;border-radius:var(--r);overflow:hidden;background:var(--ink-3);border:0;padding:0;text-align:left;color:#fff;cursor:pointer;display:block}
+.work .ph{position:absolute;inset:0;overflow:hidden}
+.work img{width:100%;height:100%;object-fit:cover;transform:scale(1.15);transition:transform .9s var(--ease)}
 .work:hover img{transform:scale(1.05)}
-.work .cap{position:absolute;inset:auto 0 0 0;padding:60px 18px 18px;background:linear-gradient(transparent,rgba(0,0,0,.88))}
-.work .cap b{display:block;font:800 1.15rem/1.15 var(--display);font-stretch:108%;text-transform:uppercase;margin-top:8px}
-.work .cap span{font-size:.86rem;color:#c8c8cc}
-.work.wide{grid-column:span 2;aspect-ratio:auto}
-.work[hidden]{display:none}
-@media (max-width:900px){.grid{grid-template-columns:1fr 1fr}}
-@media (max-width:560px){.grid{grid-template-columns:1fr}.work.wide{grid-column:auto;aspect-ratio:4/3.4}}
+.work svg.co{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))}
+.work svg.co circle,.work svg.co path{fill:none;stroke:#fff;stroke-width:3;vector-effect:non-scaling-stroke}
+.work svg.co .dot{fill:var(--red);stroke:none}
+.work svg.co .dim{stroke:var(--red);stroke-width:4}
+.work .lbl{position:absolute;font:800 .78rem/1 var(--body);letter-spacing:.12em;padding:9px 11px;background:var(--red);color:#fff;border-radius:4px;white-space:nowrap}
+.work .cap{position:absolute;inset:auto 0 0 0;padding:90px 24px 24px;background:linear-gradient(transparent,rgba(0,0,0,.9))}
+.work .cap b{display:block;font:900 1.5rem/1.05 var(--display);font-stretch:112%;text-transform:uppercase;margin-top:10px}
+.work .cap span.s{font-size:.92rem;color:#c8c8cc}
+.work .idx{position:absolute;top:18px;right:20px;font:800 .8rem/1 var(--body);letter-spacing:.14em;color:#fff;background:rgba(0,0,0,.55);padding:8px 10px;border-radius:4px}
+.work .curtain{position:absolute;inset:0;background:var(--red);transform-origin:right;transform:scaleX(0)}
+.motion .work .curtain{transform:scaleX(1)}
+.h-count{position:absolute;left:20px;bottom:40px;font:800 .82rem/1 var(--body);letter-spacing:.2em;color:#8f9399;display:flex;gap:14px;align-items:center}
+.h-count .bar{width:180px;height:3px;background:var(--line);position:relative;overflow:hidden}
+.h-count .bar i{position:absolute;inset:0;background:var(--red);transform-origin:left;transform:scaleX(0)}
+@media (max-width:900px){
+  .h-track{flex-direction:column;width:auto;padding:0 20px 90px}
+  .work{width:100%}
+  .h-count{display:none}
+}
 
-/* antes/depois */
-.ba{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
-.ba-frame{position:relative;border-radius:var(--r);overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,0,0,.45)}
-.ba-frame .lbl{position:absolute;top:16px;font:800 .78rem/1 var(--body);letter-spacing:.2em;padding:8px 11px;border-radius:4px;background:rgba(0,0,0,.7);color:#fff}
-.ba-frame .lbl.r{right:16px;background:var(--red)}
-.ba-frame .lbl.l{left:16px}
-.ba h2{font-size:clamp(2rem,4.2vw,3.2rem);margin:14px 0 18px}
+/* antes e depois */
+#antes-depois{background:var(--paper);color:var(--text)}
+.ba{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+.ba-frame{position:relative;border-radius:var(--r);overflow:hidden;box-shadow:0 40px 70px -35px rgba(0,0,0,.5);aspect-ratio:568/352}
+.ba-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ba-frame .after{clip-path:inset(0 0 0 50%)}
+.ba-frame .divider{position:absolute;top:0;bottom:0;left:50%;width:4px;margin-left:-2px;background:#fff}
+.ba-frame .divider::after{content:"◀ ▶";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;font-size:.7rem;letter-spacing:-.05em;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.ba-frame .lbl{position:absolute;top:18px;font:800 .78rem/1 var(--body);letter-spacing:.2em;padding:9px 12px;border-radius:4px;background:rgba(0,0,0,.72);color:#fff}
+.ba-frame .lbl.r{right:18px;background:var(--red)}
+.ba-frame .lbl.l{left:18px}
+.ba h2{font-size:clamp(2rem,3.8vw,3.2rem);margin:18px 0 20px}
 .ba p{color:#55555b;margin-bottom:14px}
-@media (max-width:860px){.ba{grid-template-columns:1fr;gap:30px}}
+@media (max-width:900px){.ba{grid-template-columns:1fr;gap:34px}}
+
+/* processo */
+#processo{background:var(--ink-2)}
+.steps{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.steps svg.path{position:absolute;left:40px;right:40px;top:38px;width:calc(100% - 80px);height:4px;overflow:visible}
+.steps svg.path line{stroke:var(--line);stroke-width:4;vector-effect:non-scaling-stroke}
+.steps svg.path line.fill{stroke:var(--red)}
+.step{position:relative}
+.step .n{width:80px;height:80px;border-radius:50%;background:var(--ink);border:2px solid var(--line);display:grid;place-items:center;font:900 1.6rem/1 var(--display);font-stretch:118%;position:relative;z-index:1;transition:border-color .4s,background .4s}
+.step.on .n{border-color:var(--red);background:var(--red)}
+.step h3{font:900 1.3rem/1.1 var(--display);font-stretch:112%;text-transform:uppercase;margin:26px 0 10px}
+.step p{color:#a2a2a8;font-size:.96rem}
+html:not(.motion) .step .n{border-color:var(--red)}
+@media (max-width:900px){
+  .steps{grid-template-columns:1fr;gap:40px}
+  .steps svg.path{display:none}
+  .step{display:grid;grid-template-columns:80px 1fr;gap:0 22px}
+  .step h3{margin-top:12px}
+  .step p{grid-column:2}
+}
 
 /* clientes */
-#clientes{background:var(--paper-2);border-top:1px solid #e0dfda}
-.logos{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
-.logos div{background:#fff;border:1px solid #e3e2dd;border-radius:12px;display:grid;place-items:center;padding:18px;aspect-ratio:3/2}
-.logos img{max-height:72px;width:auto;object-fit:contain;mix-blend-mode:multiply}
-@media (max-width:900px){.logos{grid-template-columns:repeat(3,1fr)}}
-@media (max-width:520px){.logos{grid-template-columns:1fr 1fr}}
+#clientes{background:var(--paper-2);color:var(--text);overflow:hidden}
+.logo-row{display:flex;gap:18px;width:max-content;will-change:transform}
+.logo-row + .logo-row{margin-top:18px}
+.logo-row div{flex:none;width:250px;height:150px;background:#fff;border:1px solid #e3e2dd;border-radius:14px;display:grid;place-items:center;padding:24px}
+.logo-row img{max-height:84px;width:auto;object-fit:contain;mix-blend-mode:multiply}
 
 /* contato */
-#contato{background:var(--red);color:#fff;position:relative;overflow:hidden}
-#contato::before{content:"";position:absolute;left:-10%;bottom:-40%;width:64%;height:180%;background:var(--ink);transform:skewX(-18deg)}
-#contato .wrap{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-#contato h2{font-size:clamp(2.4rem,5.4vw,4.4rem)}
-#contato .eyebrow{color:#fff}#contato .eyebrow::before{background:#fff}
-#contato p{color:#d7d7db;margin-top:18px;max-width:28em}
+#contato{background:var(--red);overflow:hidden;padding:150px 0}
+#contato .big{font-size:clamp(2.6rem,8.6vw,8rem);line-height:.88;white-space:nowrap}
+#contato .big .l2{color:var(--ink)}
+#contato .row{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;margin-top:60px}
+#contato p{color:#ffe1e3;max-width:28em;font-size:1.08rem}
 .cards{display:grid;gap:12px}
-.cc{display:flex;align-items:center;gap:16px;background:#fff;color:var(--text);border-radius:var(--r);padding:20px 22px;transition:transform .15s}
-.cc:hover{transform:translateX(4px)}
-.cc .ic{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;flex:none;color:#fff;background:var(--ink)}
+.cc{display:flex;align-items:center;gap:18px;background:#fff;color:var(--text);border-radius:var(--r);padding:22px 24px;transition:transform .4s var(--ease),box-shadow .4s}
+.cc:hover{transform:translateX(8px);box-shadow:-8px 0 0 var(--ink)}
+.cc .ic{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;flex:none;color:#fff;background:var(--ink)}
 .cc .ic.wa{background:var(--wa)}
-.cc .ic svg{width:24px;height:24px}
-.cc small{display:block;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:#7a7a80;font-weight:700}
-.cc b{font:800 1.25rem/1.2 var(--display);font-stretch:105%;word-break:break-word}
-@media (max-width:860px){#contato .wrap{grid-template-columns:1fr}#contato::before{width:120%;left:-50%;bottom:auto;top:-60%;height:120%}}
+.cc .ic svg{width:26px;height:26px}
+.cc small{display:block;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:#7a7a80;font-weight:700}
+.cc b{font:800 clamp(1rem,4.4vw,1.3rem)/1.2 var(--display);font-stretch:108%;overflow-wrap:anywhere}
+.magnet{display:inline-flex}
+@media (max-width:860px){#contato .row{grid-template-columns:1fr}}
 
-footer{background:var(--ink);color:#8f9399;font-size:.88rem;padding:34px 0}
-footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
-footer img{height:36px;width:auto}
+footer{background:var(--ink);color:#8f9399;font-size:.9rem;padding:80px 0 34px;overflow:hidden}
+footer .giant{font:900 clamp(5rem,24vw,22rem)/.8 var(--display);font-stretch:125%;color:transparent;-webkit-text-stroke:2px #2a2b30;text-align:center;letter-spacing:-.02em;white-space:nowrap}
+footer .row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;margin-top:40px}
+footer img{height:44px;width:auto;mix-blend-mode:lighten}
 
-.fab{position:fixed;right:18px;bottom:18px;z-index:60;width:60px;height:60px;border-radius:50%;background:var(--wa);display:grid;place-items:center;box-shadow:0 10px 30px -6px rgba(0,0,0,.45);color:#fff;transition:transform .15s}
-.fab:hover{transform:scale(1.07)}
+.fab{position:fixed;right:18px;bottom:18px;z-index:90;width:62px;height:62px;border-radius:50%;background:var(--wa);display:grid;place-items:center;box-shadow:0 12px 30px -6px rgba(0,0,0,.5);color:#fff}
+.fab::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--wa);animation:ping 2s infinite}
+@keyframes ping{to{transform:scale(1.6);opacity:0}}
 .fab svg{width:30px;height:30px}
 
-dialog{border:0;padding:0;background:transparent;max-width:min(980px,94vw);max-height:92vh;margin:auto}
-dialog::backdrop{background:rgba(0,0,0,.86)}
+/* cursor */
+.cursor,.cursor-dot{position:fixed;left:0;top:0;pointer-events:none;z-index:300;border-radius:50%;display:none}
+.cursor{width:44px;height:44px;margin:-22px 0 0 -22px;border:1.5px solid rgba(255,255,255,.7);mix-blend-mode:difference;place-items:center;font:800 .62rem/1 var(--body);letter-spacing:.16em;color:#000;transition:width .35s var(--ease),height .35s var(--ease),margin .35s var(--ease),background .35s}
+.cursor.big{width:96px;height:96px;margin:-48px 0 0 -48px;background:#fff}
+.cursor-dot{width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--red)}
+.has-cursor .cursor{display:grid}.has-cursor .cursor-dot{display:block}
+
+dialog{border:0;padding:0;background:transparent;max-width:min(1000px,94vw);max-height:92vh;margin:auto}
+dialog::backdrop{background:rgba(0,0,0,.88)}
 dialog figure{background:var(--ink);border-radius:var(--r);overflow:hidden;color:#fff}
 dialog img{max-height:76vh;width:100%;object-fit:contain;background:#000}
 dialog figcaption{padding:16px 20px;display:flex;justify-content:space-between;gap:16px;align-items:center}
 dialog figcaption b{font:800 1.1rem/1.2 var(--display);text-transform:uppercase}
 dialog button{background:#fff;color:var(--ink);border:0;border-radius:999px;padding:10px 16px;font:700 .85rem var(--body);cursor:pointer}
 
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
-.reveal.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+/* estados iniciais (só com animação ligada) */
+.motion .line > span{transform:translateY(110%)}
+.motion [data-fade]{opacity:0;transform:translateY(30px)}
 </style>
 </head>
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.23 8.23 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.23-8.22 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.910-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.23 8.23 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.23-8.22 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></symbol>
   <symbol id="i-mail" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 6.5h18v11H3zM3 7l9 6.5L21 7"/></symbol>
   <symbol id="i-pin" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-snd-off" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M11 5 6 9H3v6h3l5 4V5ZM22 9l-6 6M16 9l6 6"/></symbol>
   <symbol id="i-snd-on" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M11 5 6 9H3v6h3l5 4V5ZM15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></symbol>
 </svg>
+
+<!-- abertura -->
+<div id="intro" aria-hidden="true">
+  <div class="stage">
+    <svg viewBox="-300 -300 600 600"><path class="g-in" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"/><circle class="g-in2" r="120" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2"/><polygon class="tri" points="-250,40 260,-150 140,250" fill="#c8101e"/></svg>
+    <div class="word w1">COSTA</div>
+    <div class="word w2">USINAGEM</div>
+  </div>
+</div>
+
+<div class="progress"></div>
+<div class="cursor"></div><div class="cursor-dot"></div>
 
 <header>
   <div class="wrap">
@@ -210,7 +324,7 @@ dialog button{background:#fff;color:var(--ink);border:0;border-radius:999px;padd
     <nav>
       <a class="lnk" href="#servicos">Serviços</a>
       <a class="lnk" href="#trabalhos">Trabalhos</a>
-      <a class="lnk" href="#clientes">Clientes</a>
+      <a class="lnk" href="#processo">Como funciona</a>
       <a class="lnk" href="#contato">Contato</a>
       <a class="btn btn-wa" data-wa href="https://wa.me/5513974157919"><svg><use href="#i-wa"/></svg>Orçamento</a>
     </nav>
@@ -219,53 +333,72 @@ dialog button{background:#fff;color:var(--ink);border:0;border-radius:999px;padd
 
 <main id="topo">
   <section class="hero" style="padding:0">
+    <div class="bg-grid"></div>
+    <div class="slab"></div>
+    <svg class="gears" viewBox="-400 -400 800 800" aria-hidden="true"><path class="gear-a" fill="none" stroke="#fff" stroke-width="3"/><circle r="170" fill="none" stroke="#fff" stroke-width="3"/><circle r="60" fill="none" stroke="#fff" stroke-width="3"/></svg>
+    <svg class="gears2" viewBox="-200 -200 400 400" aria-hidden="true"><path class="gear-b" fill="none" stroke="#fff" stroke-width="3"/><circle r="70" fill="none" stroke="#fff" stroke-width="3"/></svg>
     <div class="wrap">
-      <div>
-        <span class="eyebrow">Mecânica industrial · São Vicente-SP</span>
-        <h1 class="display">Fabricação e <em>recuperação</em> de peças industriais</h1>
-        <p class="lead">Desde 1992 a Costa Usinagem fabrica e recupera rotores, válvulas rotativas, mancais, engrenagens, redutores e elementos de máquina sob medida para a indústria.</p>
-        <div class="ctas">
-          <a class="btn btn-wa" data-wa href="https://wa.me/5513974157919"><svg><use href="#i-wa"/></svg>Pedir orçamento no WhatsApp</a>
+      <div class="hero-text">
+        <span class="eyebrow" data-fade>Mecânica industrial · São Vicente-SP · Desde 1992</span>
+        <h1 class="display">
+          <span class="line"><span>Fabricação e</span></span>
+          <span class="line"><span class="red">recuperação</span></span>
+          <span class="line"><span>de peças</span></span>
+          <span class="line"><span class="outline">industriais</span></span>
+        </h1>
+        <p class="lead" data-fade>A Costa Usinagem fabrica e recupera rotores, válvulas rotativas, mancais, engrenagens, redutores e elementos de máquina sob medida para a indústria.</p>
+        <div class="ctas" data-fade>
+          <a class="btn btn-wa magnet" data-wa href="https://wa.me/5513974157919"><svg><use href="#i-wa"/></svg>Pedir orçamento no WhatsApp</a>
           <a class="btn btn-ghost" href="#trabalhos">Ver trabalhos</a>
         </div>
       </div>
-      <div class="phone">
-        <video id="reel" src="video/costa-usinagem.mp4" poster="video/capa.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Vídeo de apresentação da Costa Usinagem"></video>
-        <button class="snd" id="snd" type="button" aria-label="Ativar som"><svg><use href="#i-snd-off"/></svg></button>
+      <div class="phone-wrap">
+        <div class="phone" id="phone">
+          <video id="reel" src="video/costa-usinagem.mp4" poster="video/capa.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Vídeo de apresentação da Costa Usinagem, com narração"></video>
+          <button class="snd" id="snd" type="button"><svg><use href="#i-snd-off"/></svg><span>Ouvir</span></button>
+          <span class="tag-float t1">Ø 300 mm</span>
+          <span class="tag-float t2">40 t/h</span>
+          <span class="tag-float t3">DESDE 1992</span>
+        </div>
       </div>
     </div>
+    <div class="scroll-hint"><i></i>ROLE</div>
   </section>
 
-  <div class="strip">
-    <div class="wrap">
-      <div class="it"><b>1992</b><span>Ano de fundação</span></div>
-      <div class="it"><b id="anos">30+</b><span>Anos de experiência</span></div>
-      <div class="it"><b>Sob medida</b><span>Peças únicas ou em série</span></div>
-      <div class="it"><b>SP</b><span>São Vicente · Baixada Santista</span></div>
+  <div class="marquee" data-speed="1"><div class="track"><span>Fabricação</span><span>Recuperação</span><span>Usinagem</span><span>Manutenção industrial</span><span>Sob medida</span></div></div>
+
+  <div class="stats">
+    <div class="wrap grid4">
+      <div class="stat"><b><span data-odo="1992"></span></b><span>Ano de fundação</span></div>
+      <div class="stat"><b><span class="plus">+</span><span data-odo="30"></span></b><span>Anos de experiência</span></div>
+      <div class="stat"><b><span data-odo="12"></span></b><span>Trabalhos nesta página</span></div>
+      <div class="stat"><b>SP</b><span>São Vicente · Baixada Santista</span></div>
     </div>
   </div>
 
   <section id="servicos">
     <div class="wrap">
-      <div class="sec-head reveal">
-        <div><span class="eyebrow">O que fazemos</span><h2 class="display">Serviços</h2></div>
-        <p>Fabricamos peças novas a partir de desenho ou amostra, e recuperamos componentes desgastados para que o equipamento volte a trabalhar.</p>
+      <div class="sec-head">
+        <div><span class="eyebrow" data-fade>O que fazemos</span><h2 class="display"><span class="line"><span>Serviços</span></span></h2></div>
+        <p data-fade>Fabricamos peças novas a partir de desenho ou amostra, e recuperamos componentes desgastados para que o equipamento volte a trabalhar.</p>
       </div>
       <div class="svc">
-        <article class="svc-card reveal">
+        <article class="svc-card">
+          <svg class="gear-deco" viewBox="-200 -200 400 400"><path class="gear-c" fill="none" stroke="#000" stroke-width="6"/></svg>
           <span class="num">01</span>
           <span class="tag">Fabricação</span>
           <h3 class="display">Peças novas, sob medida</h3>
           <p>Usinagem de componentes para a indústria de alimentos, metalurgia e manutenção de máquinas.</p>
           <ul>
             <li><div>Rotores<small>Molhadeira de trigo e rotores de alta rotação</small></div></li>
-            <li><div>Engrenagens<small>Dentes retos e helicoidais, pinhões</small></div></li>
+            <li><div>Engrenagens<small>Engrenagens e pinhões</small></div></li>
             <li><div>Elementos dosadores<small>Para máquinas Bosch</small></div></li>
             <li><div>Elementos de alta resistência mecânica<small>Para calandragem de chapas grossas</small></div></li>
             <li><div>Elementos de máquina<small>Eixos, buchas, flanges e peças especiais</small></div></li>
           </ul>
         </article>
-        <article class="svc-card dark reveal">
+        <article class="svc-card dark">
+          <svg class="gear-deco" viewBox="-200 -200 400 400"><path class="gear-c" fill="none" stroke="#fff" stroke-width="6"/></svg>
           <span class="num">02</span>
           <span class="tag steel">Recuperação</span>
           <h3 class="display">Manutenção e recuperação</h3>
@@ -282,70 +415,84 @@ dialog button{background:#fff;color:var(--ink);border:0;border-radius:999px;padd
     </div>
   </section>
 
+  <div class="marquee dark" data-speed="-1"><div class="track"><span>Rotores</span><span>Eclusas</span><span>Mancais</span><span>Engrenagens</span><span>Redutores</span><span>Eixos</span></div></div>
+
   <section id="trabalhos">
     <div class="wrap">
-      <div class="sec-head reveal">
-        <div><span class="eyebrow">Portfólio</span><h2 class="display">Trabalhos realizados</h2></div>
-        <div class="filters" role="group" aria-label="Filtrar trabalhos">
-          <button type="button" data-f="todos" aria-pressed="true">Todos</button>
-          <button type="button" data-f="fab" aria-pressed="false">Fabricação</button>
-          <button type="button" data-f="rec" aria-pressed="false">Recuperação</button>
-        </div>
+      <div class="sec-head">
+        <div><span class="eyebrow" data-fade>Portfólio</span><h2 class="display"><span class="line"><span>Trabalhos</span></span><span class="line"><span class="red">realizados</span></span></h2></div>
+        <p data-fade>Peças que passaram pela nossa oficina. Clique em uma foto para ampliar.</p>
       </div>
-      <div class="grid" id="grid"></div>
+    </div>
+    <div class="h-wrap" id="hwrap">
+      <div class="h-track" id="track"></div>
+      <div class="h-count"><span id="hnum">01</span><span class="bar"><i id="hbar"></i></span><span id="htot">12</span></div>
     </div>
   </section>
 
   <section id="antes-depois">
     <div class="wrap ba">
-      <div class="ba-frame reveal">
-        <img src="img/eclusa-depois.jpg" alt="Válvula rotativa antes da recuperação, enferrujada, e depois, pintada e revisada" width="568" height="352" loading="lazy" style="width:100%">
+      <div class="ba-frame" id="ba">
+        <img class="before" src="img/eclusa-depois.jpg" alt="Válvula rotativa antes da recuperação, enferrujada" width="568" height="352" loading="lazy">
+        <img class="after" src="img/eclusa-depois.jpg" alt="Válvula rotativa depois da recuperação, pintada e revisada" width="568" height="352" loading="lazy">
+        <span class="divider"></span>
         <span class="lbl l">ANTES</span><span class="lbl r">DEPOIS</span>
       </div>
-      <div class="reveal">
-        <span class="eyebrow">Recuperação</span>
-        <h2 class="display">Da peça parada ao equipamento rodando</h2>
-        <p>Válvula rotativa (eclusa) recuperada: a peça chega desgastada e corroída e sai revisada, usinada e pintada, pronta para voltar à linha de produção.</p>
-        <p>Recuperar costuma ser mais rápido e mais barato que comprar um equipamento novo. Mande uma foto da peça pelo WhatsApp e avaliamos.</p>
-        <a class="btn btn-red" data-wa href="https://wa.me/5513974157919" style="margin-top:10px"><svg><use href="#i-wa"/></svg>Enviar foto da peça</a>
+      <div>
+        <span class="eyebrow" data-fade>Recuperação</span>
+        <h2 class="display"><span class="line"><span>Da peça parada</span></span><span class="line"><span>ao equipamento</span></span><span class="line"><span class="red">rodando</span></span></h2>
+        <p data-fade>Válvula rotativa (eclusa) recuperada: a peça chega desgastada e corroída e sai revisada, usinada e pintada, pronta para voltar à linha de produção.</p>
+        <p data-fade>Recuperar costuma ser mais rápido e mais barato que comprar um equipamento novo. Mande uma foto da peça pelo WhatsApp e avaliamos.</p>
+        <div data-fade><a class="btn btn-red magnet" data-wa href="https://wa.me/5513974157919" style="margin-top:10px"><svg><use href="#i-wa"/></svg>Enviar foto da peça</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="processo">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><span class="eyebrow" data-fade>Como funciona</span><h2 class="display"><span class="line"><span>Do contato</span></span><span class="line"><span class="red">à entrega</span></span></h2></div>
+        <p data-fade>Um caminho simples para tirar a sua peça do papel ou colocar o seu equipamento de volta para rodar.</p>
+      </div>
+      <div class="steps" id="steps">
+        <svg class="path" preserveAspectRatio="none" viewBox="0 0 100 4"><line x1="0" y1="2" x2="100" y2="2"/><line class="fill" x1="0" y1="2" x2="100" y2="2"/></svg>
+        <div class="step"><span class="n">1</span><h3>Envie a peça</h3><p>Mande foto, desenho ou medidas pelo WhatsApp ou e-mail.</p></div>
+        <div class="step"><span class="n">2</span><h3>Avaliação</h3><p>Analisamos o serviço e passamos o orçamento.</p></div>
+        <div class="step"><span class="n">3</span><h3>Usinagem</h3><p>Fabricação ou recuperação na nossa oficina em São Vicente.</p></div>
+        <div class="step"><span class="n">4</span><h3>Entrega</h3><p>Peça pronta para montar e voltar a trabalhar.</p></div>
       </div>
     </div>
   </section>
 
   <section id="clientes">
     <div class="wrap">
-      <div class="sec-head reveal">
-        <div><span class="eyebrow">Confiança</span><h2 class="display">Alguns dos nossos clientes</h2></div>
-      </div>
-      <div class="logos reveal">
-        <div><img src="img/cli-bunge.jpg" alt="Bunge" loading="lazy"></div>
-        <div><img src="img/cli-coimbra.jpg" alt="Coimbra Engenharia & Soluções" loading="lazy"></div>
-        <div><img src="img/cli-pronac.jpg" alt="Pronac" loading="lazy"></div>
-        <div><img src="img/cli-apoio.jpg" alt="Apoio Máquinas Elétricas" loading="lazy"></div>
-        <div><img src="img/cli-bequisa.jpg" alt="Bequisa" loading="lazy"></div>
-        <div><img src="img/cli-nita.jpg" alt="Nita Alimentos" loading="lazy"></div>
+      <div class="sec-head">
+        <div><span class="eyebrow" data-fade>Confiança</span><h2 class="display"><span class="line"><span>Alguns dos nossos</span></span><span class="line"><span class="red">clientes</span></span></h2></div>
       </div>
     </div>
+    <div class="logo-row" data-dir="-1"></div>
+    <div class="logo-row" data-dir="1"></div>
   </section>
 
   <section id="contato">
     <div class="wrap">
-      <div class="reveal">
-        <span class="eyebrow">Contato</span>
-        <h2 class="display" style="margin-top:14px">Peça seu orçamento</h2>
-        <p>Envie desenho, medidas ou uma foto da peça. Respondemos pelo WhatsApp ou por e-mail.</p>
-      </div>
-      <div class="cards reveal">
-        <a class="cc" data-wa href="https://wa.me/5513974157919"><span class="ic wa"><svg><use href="#i-wa"/></svg></span><div><small>WhatsApp</small><b>(13) 97415-7919</b></div></a>
-        <a class="cc" href="mailto:costausi3@gmail.com?subject=Or%C3%A7amento%20-%20Costa%20Usinagem"><span class="ic"><svg><use href="#i-mail"/></svg></span><div><small>E-mail</small><b>costausi3@gmail.com</b></div></a>
-        <div class="cc"><span class="ic"><svg><use href="#i-pin"/></svg></span><div><small>Localização</small><b>São Vicente · SP</b></div></div>
+      <span class="eyebrow" style="color:#fff" data-fade>Contato</span>
+      <h2 class="display big" style="margin-top:20px"><span class="line"><span>Peça seu</span></span><span class="line"><span class="l2">orçamento</span></span></h2>
+      <div class="row">
+        <p data-fade>Envie desenho, medidas ou uma foto da peça. Respondemos pelo WhatsApp ou por e-mail.</p>
+        <div class="cards">
+          <a class="cc" data-fade data-wa href="https://wa.me/5513974157919"><span class="ic wa"><svg><use href="#i-wa"/></svg></span><div><small>WhatsApp</small><b>(13) 97415-7919</b></div></a>
+          <a class="cc" data-fade href="mailto:costausi3@gmail.com?subject=Or%C3%A7amento%20-%20Costa%20Usinagem"><span class="ic"><svg><use href="#i-mail"/></svg></span><div><small>E-mail</small><b>costausi3@gmail.com</b></div></a>
+          <div class="cc" data-fade><span class="ic"><svg><use href="#i-pin"/></svg></span><div><small>Localização</small><b>São Vicente · SP</b></div></div>
+        </div>
       </div>
     </div>
   </section>
 </main>
 
 <footer>
-  <div class="wrap">
+  <div class="giant" aria-hidden="true">COSTA</div>
+  <div class="wrap row">
     <img src="img/logo.jpg" alt="Costa Usinagem" width="550" height="350">
     <span>Costa Usinagem · Mecânica industrial, fabricação e manutenção · São Vicente-SP · Desde 1992</span>
   </div>
@@ -360,42 +507,103 @@ dialog button{background:#fff;color:var(--ink);border:0;border-radius:999px;padd
   </figure>
 </dialog>
 
+<script src="js/gsap.min.js"></script>
+<script src="js/ScrollTrigger.min.js"></script>
+<script src="js/lenis.min.js"></script>
 <script>
+/* ---------- conteúdo ---------- */
 const WA = 'https://wa.me/5513974157919?text=' + encodeURIComponent('Olá! Vim pelo site da Costa Usinagem e gostaria de um orçamento.');
 document.querySelectorAll('[data-wa]').forEach(a => { a.href = WA; a.target = '_blank'; a.rel = 'noopener'; });
-document.getElementById('anos').textContent = (new Date().getFullYear() - 1992) + '+';
+const FOTO = n => (window.FOTOS && FOTOS[n]) || `img/${n}.jpg`;
+if (window.FOTOS) document.querySelectorAll('img[src^="img/"]').forEach(i => { i.src = FOTO(i.getAttribute('src').slice(4, -4)); });
+const anos = new Date().getFullYear() - 1992;
 
+// [arquivo, categoria, título, subtítulo, largura, altura, marcação]
 const TRAB = [
-  ['rotor-molhadeira', 'fab', 'Rotor', 'Molhadeira de trigo', 572, 432],
-  ['eclusa-antes', 'rec', 'Válvula rotativa', 'Eclusa: rotor e carcaça', 572, 332],
-  ['eclusa-40th', 'rec', 'Válvula rotativa', 'Eclusa 40 t/h', 572, 472],
-  ['bomba-vacuo', 'rec', 'Carcaça de bomba de vácuo', 'Recuperação da sede', 560, 628],
-  ['mancal', 'rec', 'Mancal', 'Recuperação Ø 300 mm', 564, 700],
-  ['engrenagens', 'fab', 'Engrenagens', 'E recuperação de redutores', 544, 648],
-  ['calandragem', 'fab', 'Elemento de alta resistência', 'Calandragem de chapas grossas', 572, 448],
-  ['dosador-bosch', 'fab', 'Elemento dosador', 'Para máquinas Bosch', 576, 440],
-  ['rotor-alta-rotacao', 'fab', 'Rotor de alta rotação', 'Usinagem de precisão', 568, 268],
-  ['pinhoes', 'fab', 'Pinhões', 'Elementos de máquina', 552, 360],
-  ['eixos', 'fab', 'Eixos flangeados', 'Elementos de máquina', 252, 236],
-  ['pecas', 'fab', 'Eixos e engrenagens', 'Elementos de máquina', 276, 236],
+  ['rotor-molhadeira', 'fab', 'Rotor', 'Molhadeira de trigo', 572, 432, { x: 330, y: 212, r: 92, l: 'ROTOR USINADO' }],
+  ['eclusa-antes', 'rec', 'Válvula rotativa', 'Eclusa: rotor e carcaça', 572, 332, null],
+  ['eclusa-40th', 'rec', 'Válvula rotativa', 'Eclusa 40 t/h', 572, 472, { x: 452, y: 212, r: 100, l: '40 t/h' }],
+  ['bomba-vacuo', 'rec', 'Carcaça de bomba de vácuo', 'Recuperação da sede', 560, 628, { x: 238, y: 300, r: 112, l: 'SEDE RECUPERADA' }],
+  ['mancal', 'rec', 'Mancal', 'Recuperação de alojamento', 564, 700, { x: 377, y: 330, r: 118, l: 'Ø 300 mm', dim: true }],
+  ['engrenagens', 'fab', 'Engrenagens', 'E recuperação de redutores', 544, 648, { x: 330, y: 322, r: 95, l: 'SOB MEDIDA' }],
+  ['calandragem', 'fab', 'Elemento de alta resistência', 'Calandragem de chapas grossas', 572, 448, { x: 300, y: 92, r: 78, l: 'ALTA RESISTÊNCIA' }],
+  ['dosador-bosch', 'fab', 'Elemento dosador', 'Para máquinas Bosch', 576, 440, { x: 150, y: 165, r: 92, l: 'MÁQUINAS BOSCH' }],
+  ['rotor-alta-rotacao', 'fab', 'Rotor de alta rotação', 'Usinagem de precisão', 568, 268, { x: 150, y: 122, r: 100, l: 'ALTA ROTAÇÃO' }],
+  ['pinhoes', 'fab', 'Pinhões', 'Elementos de máquina', 552, 360, null],
+  ['eixos', 'fab', 'Eixos flangeados', 'Elementos de máquina', 252, 236, null],
+  ['pecas', 'fab', 'Eixos e engrenagens', 'Elementos de máquina', 276, 236, null],
 ];
-const grid = document.getElementById('grid');
-grid.innerHTML = TRAB.map(([img, cat, t, s, w, h], i) =>
-  `<button class="work reveal" data-cat="${cat}" data-i="${i}" type="button">
-     <img src="img/${img}.jpg" alt="${t}: ${s}" width="${w}" height="${h}" loading="lazy">
-     <span class="cap"><span class="tag ${cat === 'rec' ? 'steel' : ''}">${cat === 'fab' ? 'Fabricação' : 'Recuperação'}</span><b>${t}</b><span>${s}</span></span>
-   </button>`).join('');
+const track = document.getElementById('track');
+track.innerHTML = TRAB.map(([img, cat, t, s, w, h, co], i) => {
+  let svg = '';
+  if (co) {
+    const right = co.x < w * .55, k = right ? 1 : -1;
+    const a = co.x + k * co.r * .7, b = co.y - co.r * .7;
+    svg = `<svg class="co" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice">
+      <circle class="ring" cx="${co.x}" cy="${co.y}" r="${co.r}" pathLength="1"/>
+      <circle class="dot" cx="${co.x}" cy="${co.y}" r="6"/>
+      ${co.dim ? `<path class="dim" d="M${co.x - co.r} ${co.y}H${co.x + co.r}" pathLength="1"/>` : ''}
+      <path class="lead" d="M${a} ${b}l${k * 50} -50" pathLength="1"/>
+    </svg>`;
+  }
+  return `<button class="work" type="button" data-i="${i}" data-cat="${cat}">
+    <span class="ph"><img src="${FOTO(img)}" alt="${t}: ${s}" width="${w}" height="${h}" loading="lazy"></span>
+    ${svg}${co ? `<span class="lbl" data-x="${co.x}" data-y="${co.y}" data-r="${co.r}" data-w="${w}" data-h="${h}">${co.l}</span>` : ''}
+    <span class="idx">${String(i + 1).padStart(2, '0')} / ${TRAB.length}</span>
+    <span class="cap"><span class="tag ${cat === 'rec' ? 'steel' : ''}">${cat === 'fab' ? 'Fabricação' : 'Recuperação'}</span><b>${t}</b><span class="s">${s}</span></span>
+    <span class="curtain"></span>
+  </button>`;
+}).join('');
+document.getElementById('htot').textContent = TRAB.length;
 
-document.querySelectorAll('.filters button').forEach(b => b.addEventListener('click', () => {
-  document.querySelectorAll('.filters button').forEach(x => x.setAttribute('aria-pressed', x === b));
-  grid.querySelectorAll('.work').forEach(w => w.hidden = !(b.dataset.f === 'todos' || w.dataset.cat === b.dataset.f));
-}));
+// posiciona o rótulo na ponta da linha de chamada, respeitando o recorte da foto (object-fit: cover)
+function placeLabels() {
+  document.querySelectorAll('.work .lbl').forEach(l => {
+    const card = l.parentElement, cw = card.clientWidth, ch = card.clientHeight;
+    const w = +l.dataset.w, h = +l.dataset.h, s = Math.max(cw / w, ch / h), ox = (cw - w * s) / 2, oy = (ch - h * s) / 2;
+    const x0 = +l.dataset.x, y0 = +l.dataset.y, r0 = +l.dataset.r, right = x0 < w * .55, k = right ? 1 : -1;
+    const ex = ox + (x0 + k * r0 * .7 + k * 50) * s, ey = oy + (y0 - r0 * .7 - 50) * s;
+    let lx = right ? ex + 6 : ex - l.offsetWidth - 6, ly = ey - l.offsetHeight / 2;
+    lx = Math.min(cw - l.offsetWidth - 12, Math.max(12, lx)); ly = Math.max(60, ly);
+    l.style.left = lx + 'px'; l.style.top = ly + 'px';
+  });
+}
 
+// clientes
+const CLI = [['cli-bunge', 'Bunge'], ['cli-coimbra', 'Coimbra Engenharia & Soluções'], ['cli-pronac', 'Pronac'], ['cli-apoio', 'Apoio Máquinas Elétricas'], ['cli-bequisa', 'Bequisa'], ['cli-nita', 'Nita Alimentos']];
+document.querySelectorAll('.logo-row').forEach((row, k) => {
+  const list = k ? [...CLI].reverse() : CLI;
+  row.innerHTML = [...list, ...list, ...list].map(([n, a]) => `<div><img src="${FOTO(n)}" alt="${a}" loading="lazy"></div>`).join('');
+});
+
+// odômetro
+document.querySelectorAll('[data-odo]').forEach(el => {
+  const val = el.dataset.odo === '30' ? String(Math.min(30, anos)) : el.dataset.odo;
+  el.innerHTML = [...val].map(d => `<span class="odo" data-d="${d}">${'0123456789'.split('').map(x => `<i>${x}</i>`).join('')}</span>`).join('');
+  el.setAttribute('aria-label', val);
+});
+
+// engrenagens em SVG
+function gearD(R, n, depth = .14) {
+  const r = R * (1 - depth), st = Math.PI * 2 / n; let d = '';
+  const P = (rr, aa) => `${(rr * Math.cos(aa)).toFixed(1)} ${(rr * Math.sin(aa)).toFixed(1)}`;
+  for (let i = 0; i < n; i++) {
+    const a = i * st;
+    d += (i ? 'L' : 'M') + P(r, a) + 'L' + P(R, a + st * .18) + 'L' + P(R, a + st * .46) + 'L' + P(r, a + st * .64) + `A${r} ${r} 0 0 1 ` + P(r, a + st);
+  }
+  return d + 'Z';
+}
+document.querySelector('.gear-a').setAttribute('d', gearD(380, 28));
+document.querySelector('.gear-b').setAttribute('d', gearD(190, 16));
+document.querySelectorAll('.gear-c').forEach(p => p.setAttribute('d', gearD(190, 18)));
+document.querySelector('#intro .g-in').setAttribute('d', gearD(230, 24));
+
+// lightbox
 const lb = document.getElementById('lb');
-grid.addEventListener('click', e => {
+track.addEventListener('click', e => {
   const w = e.target.closest('.work'); if (!w) return;
   const [img, cat, t, s] = TRAB[w.dataset.i];
-  lb.querySelector('img').src = `img/${img}.jpg`; lb.querySelector('img').alt = `${t}: ${s}`;
+  lb.querySelector('img').src = FOTO(img); lb.querySelector('img').alt = `${t}: ${s}`;
   lb.querySelector('.tag').textContent = cat === 'fab' ? 'Fabricação' : 'Recuperação';
   lb.querySelector('b').textContent = `${t} · ${s}`;
   lb.showModal();
@@ -403,17 +611,204 @@ grid.addEventListener('click', e => {
 document.getElementById('lbx').onclick = () => lb.close();
 lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
 
+// som do vídeo
 const v = document.getElementById('reel'), snd = document.getElementById('snd');
 snd.onclick = () => {
   v.muted = !v.muted; if (!v.muted) { v.currentTime = 0; v.play(); }
   snd.querySelector('use').setAttribute('href', v.muted ? '#i-snd-off' : '#i-snd-on');
-  snd.setAttribute('aria-label', v.muted ? 'Ativar som' : 'Desativar som');
+  snd.querySelector('span').textContent = v.muted ? 'Ouvir' : 'Sem som';
 };
 
-const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
-  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-}), { threshold: .12 }) : null;
-document.querySelectorAll('.reveal').forEach(el => io ? io.observe(el) : el.classList.add('in'));
+/* ---------- motion ---------- */
+const MOTION = document.documentElement.classList.contains('motion') && window.gsap && window.ScrollTrigger;
+if (!MOTION) {
+  document.documentElement.classList.remove('motion');
+  document.getElementById('intro')?.remove();
+  document.querySelectorAll('.odo').forEach(o => o.style.transform = `translateY(-${o.dataset.d}em)`);
+  addEventListener('load', placeLabels); placeLabels();
+} else {
+  gsap.registerPlugin(ScrollTrigger);
+  const fine = matchMedia('(hover:hover) and (pointer:fine) and (min-width:901px)').matches;
+
+  // rolagem suave
+  let lenis = null;
+  if (window.Lenis) {
+    lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0);
+    document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+      const el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); lenis.scrollTo(el, { offset: -70 });
+    }));
+    lenis.stop();
+  }
+
+  // abertura
+  const intro = document.getElementById('intro');
+  const splitChars = el => { el.innerHTML = [...el.textContent].map(c => `<span>${c}</span>`).join(''); return el.children; };
+  const c1 = splitChars(intro.querySelector('.w1')), c2 = splitChars(intro.querySelector('.w2'));
+  const gin = intro.querySelector('.g-in'), gin2 = intro.querySelector('.g-in2'), tri = intro.querySelector('.tri');
+  const L = gin.getTotalLength(); gsap.set(gin, { strokeDasharray: L, strokeDashoffset: L });
+  const L2 = 2 * Math.PI * 120; gsap.set(gin2, { strokeDasharray: L2, strokeDashoffset: L2 });
+  gsap.set(tri, { scale: 0, rotation: -30, transformOrigin: '50% 50%', x: 260 });
+  gsap.set([c1, c2], { yPercent: 120, opacity: 0 });
+  gsap.set(intro, { clipPath: 'inset(0% 0% 0% 0%)' });
+  const heroIn = gsap.timeline({ paused: true })
+    .from('.hero .slab', { scaleY: 0, duration: 1.1, ease: 'expo.out' }, 0)
+    .from('.hero .bg-grid', { opacity: 0, duration: 1.2 }, 0)
+    .to('.hero h1 .line > span', { y: 0, duration: 1.1, stagger: .09, ease: 'expo.out' }, .1)
+    .to('.hero [data-fade]', { opacity: 1, y: 0, duration: .9, stagger: .1, ease: 'power3.out' }, .35)
+    .from('.phone', { y: 120, rotateX: 18, rotateY: -22, opacity: 0, duration: 1.4, ease: 'expo.out' }, .25)
+    .from('.phone .tag-float', { scale: 0, opacity: 0, duration: .7, stagger: .12, ease: 'back.out(2)' }, .9)
+    .from('header', { yPercent: -100, duration: .8, ease: 'expo.out' }, .4);
+  gsap.timeline({ onComplete: () => { intro.remove(); lenis?.start(); } })
+    .to(gin, { strokeDashoffset: 0, duration: 1.0, ease: 'power2.inOut' }, 0)
+    .to(gin2, { strokeDashoffset: 0, duration: .9, ease: 'power2.inOut' }, .1)
+    .to(gin, { rotation: 40, transformOrigin: '50% 50%', duration: 2.2, ease: 'none' }, 0)
+    .to(tri, { scale: 1, rotation: 0, x: 0, duration: .7, ease: 'back.out(1.6)' }, .55)
+    .to(c1, { yPercent: 0, opacity: 1, duration: .6, stagger: .05, ease: 'expo.out' }, .75)
+    .to(c2, { yPercent: 0, opacity: 1, duration: .5, stagger: .03, ease: 'expo.out' }, .95)
+    .to(intro, { clipPath: 'inset(0% 0% 100% 0%)', duration: .9, ease: 'expo.inOut' }, 1.75)
+    .add(() => heroIn.play(), 2.05);
+
+  // barra de progresso e topo
+  gsap.to('.progress', { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: true } });
+  const header = document.querySelector('header'); let lastY = 0;
+  ScrollTrigger.create({ start: 0, end: 'max', onUpdate: self => {
+    const y = self.scroll(); header.classList.toggle('solid', y > 40);
+    header.classList.toggle('hide', y > 500 && y > lastY); lastY = y;
+  } });
+
+  // hero: engrenagens giram com a rolagem, texto sobe
+  gsap.to('.hero .gears', { rotation: 200, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  gsap.to('.hero .gears2', { rotation: -260, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  gsap.to('.hero .gear-a', { rotation: 360, transformOrigin: '50% 50%', duration: 60, repeat: -1, ease: 'none' });
+  gsap.to('.hero .slab', { xPercent: 18, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  gsap.to('.hero-text', { y: -90, opacity: .2, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+
+  // celular inclina com o mouse
+  if (fine) {
+    const ph = document.getElementById('phone');
+    const rx = gsap.quickTo(ph, 'rotateX', { duration: .8, ease: 'power3' }), ry = gsap.quickTo(ph, 'rotateY', { duration: .8, ease: 'power3' });
+    document.querySelector('.hero').addEventListener('mousemove', e => { ry((e.clientX / innerWidth - .5) * 18); rx(-(e.clientY / innerHeight - .5) * 14); });
+  }
+
+  // textos que surgem
+  gsap.utils.toArray('section:not(.hero) h2').forEach(h => {
+    gsap.to(h.querySelectorAll('.line > span'), { y: 0, duration: 1.1, stagger: .1, ease: 'expo.out', scrollTrigger: { trigger: h, start: 'top 88%' } });
+  });
+  gsap.utils.toArray('section:not(.hero) [data-fade]').forEach(el => {
+    gsap.to(el, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
+  });
+
+  // faixas corridas: aceleram com a rolagem
+  gsap.utils.toArray('.marquee').forEach(m => {
+    const tr = m.querySelector('.track'); tr.innerHTML += tr.innerHTML + tr.innerHTML;
+    const dir = +m.dataset.speed; let x = 0, boost = 0;
+    gsap.ticker.add((t, dt) => {
+      const ww = tr.scrollWidth / 3; if (!ww) return;
+      x -= (1.2 + boost) * dir * dt * .06; boost *= .92; x = ((x % ww) - ww) % ww; tr.style.transform = `translateX(${x}px)`;
+    });
+    ScrollTrigger.create({ onUpdate: s => { boost = Math.min(14, Math.abs(s.getVelocity()) / 120) * s.direction; } });
+  });
+
+  // odômetros
+  gsap.utils.toArray('.odo').forEach((o, k) => {
+    gsap.fromTo(o, { y: 0 }, { y: () => `-${o.dataset.d}em`, duration: 2, delay: k * .06, ease: 'expo.out', scrollTrigger: { trigger: '.stats', start: 'top 80%' } });
+  });
+  gsap.from('.stat', { opacity: 0, y: 40, stagger: .1, duration: .9, ease: 'power3.out', scrollTrigger: { trigger: '.stats', start: 'top 80%' } });
+
+  // cartões de serviço: entrada 3D e inclinação no mouse
+  gsap.from('.svc-card', { y: 120, rotateX: 14, opacity: 0, duration: 1.2, stagger: .15, ease: 'expo.out', scrollTrigger: { trigger: '.svc', start: 'top 82%' } });
+  gsap.utils.toArray('.svc-card').forEach(c => {
+    gsap.from(c.querySelectorAll('li'), { x: -30, opacity: 0, duration: .7, stagger: .07, ease: 'power3.out', scrollTrigger: { trigger: c, start: 'top 72%' } });
+    gsap.to(c.querySelector('.gear-deco'), { rotation: 140, ease: 'none', scrollTrigger: { trigger: c, start: 'top bottom', end: 'bottom top', scrub: true } });
+    if (fine) {
+      const rx = gsap.quickTo(c, 'rotateX', { duration: .6 }), ry = gsap.quickTo(c, 'rotateY', { duration: .6 });
+      c.addEventListener('mousemove', e => { const b = c.getBoundingClientRect(); ry(((e.clientX - b.left) / b.width - .5) * 8); rx(-((e.clientY - b.top) / b.height - .5) * 8); });
+      c.addEventListener('mouseleave', () => { rx(0); ry(0); });
+    }
+  });
+
+  // galeria: horizontal no computador, vertical no celular
+  placeLabels(); addEventListener('resize', placeLabels);
+  const works = gsap.utils.toArray('.work');
+  const prepWork = w => {
+    const q = s => w.querySelector(s);
+    const ring = q('.ring'), lead = q('.lead'), dim = q('.dim'), lbl = q('.lbl'), dot = q('.dot');
+    [ring, lead, dim].forEach(p => p && gsap.set(p, { strokeDasharray: 1, strokeDashoffset: 1 }));
+    if (lbl) gsap.set(lbl, { scale: 0, opacity: 0, transformOrigin: '0% 100%' });
+    if (dot) gsap.set(dot, { scale: 0, transformOrigin: 'center', transformBox: 'fill-box' });
+    const tl = gsap.timeline({ paused: true })
+      .to(q('.curtain'), { scaleX: 0, duration: .9, ease: 'expo.inOut' }, 0)
+      .fromTo(q('img'), { scale: 1.3 }, { scale: 1.05, duration: 1.4, ease: 'expo.out', clearProps: 'transform' }, .2)
+      .from(q('.cap'), { y: 40, opacity: 0, duration: .7, ease: 'power3.out' }, .5);
+    if (dot) tl.to(dot, { scale: 1, duration: .4, ease: 'back.out(3)' }, .75);
+    if (ring) tl.to(ring, { strokeDashoffset: 0, duration: .8, ease: 'power2.inOut' }, .75);
+    if (dim) tl.to(dim, { strokeDashoffset: 0, duration: .5, ease: 'power2.out' }, 1.15);
+    if (lead) tl.to(lead, { strokeDashoffset: 0, duration: .35, ease: 'power2.out' }, 1.25);
+    if (lbl) tl.to(lbl, { scale: 1, opacity: 1, duration: .5, ease: 'back.out(2)' }, 1.45);
+    return tl;
+  };
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 901px)', () => {
+    const hw = document.getElementById('hwrap');
+    const dist = () => track.scrollWidth - innerWidth;
+    const tween = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: {
+      trigger: '#trabalhos', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true, anticipatePin: 1,
+      onUpdate: s => { gsap.set('#hbar', { scaleX: s.progress }); document.getElementById('hnum').textContent = String(Math.min(TRAB.length, 1 + Math.floor(s.progress * TRAB.length))).padStart(2, '0'); }
+    } });
+    works.forEach(w => {
+      const tl = prepWork(w);
+      ScrollTrigger.create({ trigger: w, containerAnimation: tween, start: 'left 92%', onEnter: () => tl.play() });
+    });
+  });
+  mm.add('(max-width: 900px)', () => {
+    works.forEach(w => { const tl = prepWork(w); ScrollTrigger.create({ trigger: w, start: 'top 82%', onEnter: () => tl.play() }); });
+  });
+
+  // antes e depois: a divisória acompanha a rolagem
+  const ba = document.getElementById('ba');
+  gsap.timeline({ scrollTrigger: { trigger: ba, start: 'top 80%', end: 'bottom 40%', scrub: 1 } })
+    .fromTo(ba.querySelector('.after'), { clipPath: 'inset(0% 0% 0% 100%)' }, { clipPath: 'inset(0% 0% 0% 50%)', ease: 'none' }, 0)
+    .fromTo(ba.querySelector('.divider'), { left: '100%' }, { left: '50%', ease: 'none' }, 0);
+  gsap.from(ba, { scale: .9, rotate: -2, opacity: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: ba, start: 'top 88%' } });
+
+  // processo: a linha se desenha e acende os passos
+  const steps = gsap.utils.toArray('.step');
+  gsap.set('#steps line.fill', { scaleX: 0, transformOrigin: '0% 50%' });
+  gsap.to('#steps line.fill', { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '#steps', start: 'top 75%', end: 'bottom 50%', scrub: 1,
+    onUpdate: s => steps.forEach((st, i) => st.classList.toggle('on', s.progress >= i / (steps.length - 1) - .02)) } });
+  gsap.from(steps, { y: 50, opacity: 0, duration: .9, stagger: .12, ease: 'power3.out', scrollTrigger: { trigger: '#steps', start: 'top 85%' } });
+
+  // clientes: duas fileiras em sentidos opostos
+  gsap.utils.toArray('.logo-row').forEach(row => {
+    const d = +row.dataset.dir, w3 = () => row.scrollWidth / 3;
+    gsap.fromTo(row, { x: () => d < 0 ? 0 : -w3() }, { x: () => d < 0 ? -w3() : 0, ease: 'none', scrollTrigger: { trigger: '#clientes', start: 'top bottom', end: 'bottom top', scrub: true, invalidateOnRefresh: true } });
+  });
+
+  // contato: título gigante desliza
+  gsap.fromTo('#contato .big .line:first-child > span', { xPercent: -4 }, { xPercent: 3, ease: 'none', scrollTrigger: { trigger: '#contato', start: 'top bottom', end: 'bottom top', scrub: true } });
+  gsap.fromTo('#contato .big .line:last-child > span', { xPercent: 6 }, { xPercent: -3, ease: 'none', scrollTrigger: { trigger: '#contato', start: 'top bottom', end: 'bottom top', scrub: true } });
+  gsap.from('footer .giant', { yPercent: 60, opacity: 0, ease: 'none', scrollTrigger: { trigger: 'footer', start: 'top bottom', end: 'top 30%', scrub: true } });
+
+  // botões magnéticos e cursor
+  if (fine) {
+    document.documentElement.classList.add('has-cursor');
+    document.querySelectorAll('.magnet').forEach(b => {
+      const mx = gsap.quickTo(b, 'x', { duration: .5, ease: 'power3' }), my = gsap.quickTo(b, 'y', { duration: .5, ease: 'power3' });
+      b.addEventListener('mousemove', e => { const r = b.getBoundingClientRect(); mx((e.clientX - r.left - r.width / 2) * .3); my((e.clientY - r.top - r.height / 2) * .4); });
+      b.addEventListener('mouseleave', () => { mx(0); my(0); });
+    });
+    const cur = document.querySelector('.cursor'), dot = document.querySelector('.cursor-dot');
+    const cx = gsap.quickTo(cur, 'x', { duration: .45, ease: 'power3' }), cy = gsap.quickTo(cur, 'y', { duration: .45, ease: 'power3' });
+    const dx = gsap.quickTo(dot, 'x', { duration: .08 }), dy = gsap.quickTo(dot, 'y', { duration: .08 });
+    addEventListener('mousemove', e => { cx(e.clientX); cy(e.clientY); dx(e.clientX); dy(e.clientY); });
+    works.forEach(w => { w.addEventListener('mouseenter', () => { cur.classList.add('big'); cur.textContent = 'VER'; }); w.addEventListener('mouseleave', () => { cur.classList.remove('big'); cur.textContent = ''; }); });
+    document.querySelectorAll('a,button:not(.work)').forEach(a => { a.addEventListener('mouseenter', () => gsap.to(cur, { scale: 1.5, duration: .3 })); a.addEventListener('mouseleave', () => gsap.to(cur, { scale: 1, duration: .3 })); });
+  }
+
+  addEventListener('load', () => { placeLabels(); ScrollTrigger.refresh(); });
+}
 </script>
 </body>
 </html>

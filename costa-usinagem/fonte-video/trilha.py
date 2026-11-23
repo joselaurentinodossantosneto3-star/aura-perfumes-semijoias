@@ -1,7 +1,7 @@
 # Trilha sincronizada com o vídeo motion (120 bpm, lá menor). Só numpy.
 import sys, wave, numpy as np
 OUT = sys.argv[1]
-SR = 44100; TOTAL = 49.0; N = int(SR * (TOTAL + 1)); BEAT = .5
+SR = 44100; TOTAL = 50.5; N = int(SR * (TOTAL + 1)); BEAT = .5
 rng = np.random.default_rng(3)
 L = np.zeros(N); R = np.zeros(N)          # mix seco
 RV = np.zeros(N)                           # envio para reverb
@@ -138,7 +138,7 @@ add(riser(.9), 45.1, .9)
 # encerramento 46–49
 add(impact(1.3), 46.0, rev=.7, dr=True); duck(46.0, .9, .8)
 for nn in (33, 45, 57, 60, 64, 69, 72):
-    add(additive(mid(nn), 3.5, nh=10, bright=.75, decay=.7, hdecay=.3, att=.01) * .07, 46.0, pan=rng.uniform(-.4, .4), rev=.6)
+    add(additive(mid(nn), 4.5, nh=10, bright=.75, decay=.55, hdecay=.3, att=.01) * .07, 46.0, pan=rng.uniform(-.4, .4), rev=.6)
 for k, nn in enumerate((69, 72, 76, 81)): add(additive(mid(nn), 1.2, nh=6, decay=3) * .05, 46.15 + k * .12, pan=-.3 + k * .2, rev=.6)
 
 # -------- reverb (convolução com cauda de ruído) + mix
